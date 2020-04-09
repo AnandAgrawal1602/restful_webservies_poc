@@ -14,14 +14,12 @@ public class SessionUtil {
    
     private SessionUtil(){
         Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
-                
+        configuration.configure("hibernate.cfg.xml");                
         sessionFactory = configuration.buildSessionFactory();
     }
     
     public static Session getSession(){
-        Session session =  getInstance().sessionFactory.openSession();
-        
+        Session session =  getInstance().sessionFactory.openSession();        
         return session;
     }
 }

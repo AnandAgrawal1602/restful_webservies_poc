@@ -1,5 +1,8 @@
 package com.student.dao;
 
+import java.util.List;
+
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -29,5 +32,52 @@ import com.student.entity.Student;
 	        Student.setAge(bean.getAge());	        
 	        session.save(Student);
 	    }   
+	    
+	    /*
+		 * this method is used for getting all student record from student table
+		 */
+	    public List<Student> getStudents(){
+	        Session session = SessionUtil.getSession();    
+	        Query query = session.createQuery("from Student");
+	        List<Student> Students =  query.list();
+	        session.close();
+	        return Students;
+	    }
+	 
+	    /*
+		 * this method is used for deleting student record as per given id from student table
+		 */
+	    public int deleteStudent(int id) {
+	        Session session = SessionUtil.getSession();
+	        Transaction tx = session.beginTransaction();
+	        String hql = "delete from Student where id = :id";
+	        Query query = session.createQuery(hql);
+	        query.setInteger("id",id);
+	        int rowCount = query.executeUpdate();
+	        System.out.println("Rows affected: " + rowCount);
+	        tx.commit();
+	        session.close();
+	        return rowCount;
+	    }
+	    
+	    /*
+		 * this method is used for updating  student record  as per given id
+		 */
+	    public int updateStudent(int id, Student stu){
+	         if(id <=0)  
+	               return 0;  
+	         Session session = SessionUtil.getSession();
+	            Transaction tx = session.beginTransaction();
+	            String hql = "update Student set name = :name, age=:age where id = :id";
+	            Query query = session.createQuery(hql);
+	            query.setInteger("id",id);
+	            query.setString("name",stu.getName());
+	            query.setInteger("age",stu.getAge());
+	            int rowCount = query.executeUpdate();
+	            System.out.println("Rows affected: " + rowCount);
+	            tx.commit();
+	            session.close();
+	            return rowCount;
+	    }
 }
 
